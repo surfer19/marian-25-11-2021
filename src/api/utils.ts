@@ -1,39 +1,11 @@
-import { OrderAPI, Order, OrderPriceItem, OrderPriceListAPI } from "./types";
+import {
+  OrderAPI,
+  Order,
+  OrderPriceItem,
+  OrderPriceListAPI,
+  OrderPriceType,
+} from "./types";
 import { isEmpty, isNil } from "ramda";
-
-/*
- * API -> FE structure transformations
- */
-
-export const transformOrderToLocalStructure = (order: OrderAPI): Order => ({
-  ...order,
-  bids: [...transformPriceListToLocalStructure(order.bids)],
-  asks: [...transformPriceListToLocalStructure(order.asks)],
-});
-
-export const transformPriceListToLocalStructure = (
-  orderPriceList: OrderPriceListAPI
-): OrderPriceItem[] => {
-  if (isValueInvalid(orderPriceList)) {
-    return [];
-  }
-  return orderPriceList
-    .map((orderPriceItems: number[]) => {
-      return isPriceItemListValid(orderPriceItems)
-        ? {
-            price: orderPriceItems[0],
-            size: orderPriceItems[1],
-          }
-        : undefined;
-    })
-    .filter((item) => item) as OrderPriceItem[]; // filter out undefined values
-};
-
-// TODO: possibly remove
-export const filterOutZeroSizeOrders = (
-  orderPriceList: OrderPriceItem[]
-): OrderPriceItem[] =>
-  orderPriceList.filter((priceItem: OrderPriceItem) => priceItem?.size > 0);
 
 /*
  * HELPER METHODS
@@ -50,3 +22,37 @@ export const isPriceItemListValid = <T>(list: T[]) => {
   }
   return true;
 };
+
+/*
+ * API -> FE structure transformations
+ */
+
+export const transformPriceListToLocalStructure = (
+  orderPriceList: OrderPriceListAPI,
+  type: OrderPriceType
+): OrderPriceItem[] => {
+  if (isValueInvalid(orderPriceList)) {
+    return [];
+  }
+  return orderPriceList
+    .map((orderPriceItems: number[]) => {
+      return isPriceItemListValid(orderPriceItems)
+        ? {
+            price: orderPriceItems[0],
+            size: orderPriceItems[1],
+            type,
+          }
+        : undefined;
+    })
+    .filter((item) => item) as OrderPriceItem[]; // filter out undefined values
+};
+
+export const transformOrderToLocalStructure = (order: OrderAPI): Order => ({
+  ...order,
+  bids: [
+    ...transformPriceListToLocalStructure(order.bids, OrderPriceType.Bids),
+  ],
+  asks: [
+    ...transformPriceListToLocalStructure(order.asks, OrderPriceType.Asks),
+  ],
+});

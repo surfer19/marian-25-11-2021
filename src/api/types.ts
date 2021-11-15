@@ -1,19 +1,30 @@
+/* eslint-disable no-unused-vars */
+
 /*
  * API structures (before transformations)
  */
 export enum Feed {
   Ui1 = "book_ui_1",
+  Snapshot = "book_ui_1_snapshot",
+  Empty = "",
+}
+
+export enum OrderPriceType {
+  Bids = "bids",
+  Asks = "asks",
 }
 
 export enum ProductId {
-  xbtusd = "book_ui_1",
+  XBTUSD = "PI_XBTUSD",
+  Empty = "",
 }
 
 export type OrderPriceListAPI = number[][];
 
 export type OrderAPI = {
   feed: Feed;
-  product_id: ProductId;
+  numLevels?: number;
+  product_id?: ProductId;
   bids: number[][] | [];
   asks: number[][] | [];
 };
@@ -22,14 +33,21 @@ export type OrderAPI = {
  * Transformed structures
  */
 
-export type OrderPriceItem = {
+export type OrderPriceItem = OrderPriceItemAdditions & {
+  type: OrderPriceType;
   price: number;
   size: number;
 };
 
+export type OrderPriceItemAdditions = {
+  total: number;
+  totalLevelRatio?: number;
+};
+
 export type Order = {
   feed: Feed;
-  product_id: ProductId;
+  product_id?: ProductId;
+  numLevels?: number;
   bids: OrderPriceItem[] | [];
   asks: OrderPriceItem[] | [];
 };
