@@ -1,4 +1,4 @@
-import { OrderPriceItem, OrderPriceType } from "../../api/types";
+import { OrderPriceItem, OrderPriceType } from "../../api/orderbook/orderbook.types";
 import { findHighestValueByAttribute } from "../../utils/utils";
 import {
   countAllLevels,

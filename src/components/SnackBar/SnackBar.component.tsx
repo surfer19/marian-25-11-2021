@@ -1,7 +1,13 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { StyledSnackBar } from "./SnackBar.styles";
 
-export const Snackbar = ({ isActive, message, children }: any) => {
+export type SnackbarProps = {
+  isActive: boolean;
+  message?: string;
+  children?: ReactNode;
+};
+
+export const Snackbar = ({ isActive, message, children }: SnackbarProps) => {
   return (
     <StyledSnackBar isActive={isActive}>
       <>

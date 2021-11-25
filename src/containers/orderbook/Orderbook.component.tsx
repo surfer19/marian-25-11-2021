@@ -1,32 +1,16 @@
 import React, { FunctionComponent, memo, useContext, useState } from "react";
 import { Row, Col } from "react-flexbox-grid";
-import { ProductId } from "../../api/types";
-import styled from "styled-components";
+import { OrderPriceItem, ProductId } from "../../api/orderbook/orderbook.types";
 import { OrderbookAsks } from "./components/OrderbookAsks.component";
 import { OrderbookBids } from "./components/OrderbookBids.component";
 import { OrderbookHeader } from "./components/OrderbookHeader.component";
 import { useToggle, useMedia } from "react-use";
-import { theme } from "../../theme/theme.constants";
 import { OrdersDispatchContext } from "./state/OrdersContext";
 import { calculateCurrentSpread, prepareOrderItems } from "./Orderbook.utils";
 import { OrderbookProps } from "./Orderbook.types";
 import { SortType } from "./state/OrdersReducer.types";
 import { OrderBookWrapper } from "./Orderbook.styles";
-
-export const StyledBtn = styled<any>("button")`
-  background: ${({ theme, bgColor }) =>
-    theme.colors[bgColor] ? theme.colors[bgColor] : "white"};
-  color: white;
-  border: none;
-  border-radius: 0.2rem;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-
-  &:hover {
-    background-color: ${theme.colors.colaRedLight};
-    cursor: pointer;
-  }
-`;
+import { Button } from "../../components/Button/Button.component";
 
 export const Orderbook: FunctionComponent<OrderbookProps> = memo(
   ({ orderState, setproductIds }: OrderbookProps) => {
@@ -38,13 +22,13 @@ export const Orderbook: FunctionComponent<OrderbookProps> = memo(
     const numberOfOrderItemsToShow = isDesktop ? 15 : 7;
     const dispatch = useContext(OrdersDispatchContext);
     // ASKS
-    const preparedAsks = prepareOrderItems({
+    const preparedAsks: OrderPriceItem[] = prepareOrderItems({
       orderPriceItemList: orderState?.order?.asks,
       numberOfOrderItemsToShow,
       sortType: SortType.Desc,
     });
     // BIDS
-    const preparedBids = prepareOrderItems({
+    const preparedBids: OrderPriceItem[] = prepareOrderItems({
       orderPriceItemList: orderState?.order?.bids,
       numberOfOrderItemsToShow,
       sortType: SortType.Asc,
@@ -94,9 +78,9 @@ export const Orderbook: FunctionComponent<OrderbookProps> = memo(
               <OrderbookBids bids={preparedBids} />
             </Col>
           </Row>
-          <StyledBtn bgColor="violent" onClick={onContactSwitchButtonClick}>
+          <Button bgColor="violent" onClick={onContactSwitchButtonClick}>
             Toggle Feed
-          </StyledBtn>
+          </Button>
         </OrderBookWrapper>
       </>
     );

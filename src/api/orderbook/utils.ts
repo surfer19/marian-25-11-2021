@@ -4,7 +4,7 @@ import {
   OrderPriceItem,
   OrderPriceListAPI,
   OrderPriceType,
-} from "./types";
+} from "./orderbook.types";
 import { isEmpty, isNil } from "ramda";
 
 /*

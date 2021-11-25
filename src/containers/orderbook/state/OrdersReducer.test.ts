@@ -1,4 +1,4 @@
-import { Feed, OrderPriceType, ProductId } from "../../../api/types";
+import { Feed, OrderPriceType, ProductId } from "../../../api/orderbook/orderbook.types";
 import { ActionOrders, ordersReducer } from "./OrdersReducer";
 
 const initialAction = {

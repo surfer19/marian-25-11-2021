@@ -1,11 +1,12 @@
 import styled from "styled-components";
+import { Theme } from "../../../theme/theme.constants";
 
 export interface StyledTableCellProps {
   flex?: string;
   color?: string;
   center?: string;
   background?: string;
-  theme?: any;
+  theme?: Theme;
 }
 
 export const StyledTableCell = styled("div")<StyledTableCellProps>`

@@ -12,7 +12,10 @@ export const fadeOut = css`
   transition: visibility 0s linear 300ms, opacity 300ms;
 `;
 
-export const StyledSnackBar = styled<any>("div")`
+export type StyledSnackBarProps = {
+  isActive: boolean;
+};
+export const StyledSnackBar = styled("div")<StyledSnackBarProps>`
   visibility: hidden;
   min-width: 250px;
   margin-left: -125px;
@@ -34,5 +37,5 @@ export const StyledSnackBar = styled<any>("div")`
     display: block;
   }
 
-  ${({ isActive }: any) => (isActive ? fadeIn : fadeOut)}
+  ${({ isActive }) => (isActive ? fadeIn : fadeOut)}
 `;

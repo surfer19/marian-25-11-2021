@@ -1,4 +1,4 @@
-import { OrderPriceItem, OrderPriceType } from "../api/types";
+import { OrderPriceItem, OrderPriceType } from "../api/orderbook/orderbook.types";
 import {
   sortListAscendingByAttribute,
   sortListDescendingByAttribute,
@@ -6,7 +6,7 @@ import {
 
 type Item = {
   attr: number;
-  x: any;
+  x: string;
 };
 
 describe("sortAscendingByAttribute", () => {

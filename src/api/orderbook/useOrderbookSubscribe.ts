@@ -1,37 +1,41 @@
+/* eslint-disable no-unused-vars */
 import { Dispatch, Reducer, useEffect, useReducer, useState } from "react";
 import { useThrottle } from "react-use";
-import { Feed, ProductId } from "../api/types";
-import { transformOrderToLocalStructure } from "../api/utils";
+import { ReadyState } from "react-use-websocket";
 import {
   ordersReducer,
   initialOrders,
-} from "../containers/orderbook/state/OrdersReducer";
+} from "../../containers/orderbook/state/OrdersReducer";
 import {
   OrderBookState,
   OrderReducerAction,
-} from "../containers/orderbook/state/OrdersReducer.types";
-import { useWrappedWebsocket } from "./useWrappedWebsocket";
-
-export interface UseOrderBookSubscribeProps {
-  feed: Feed;
-  socketUrl: string;
-}
+} from "../../containers/orderbook/state/OrdersReducer.types";
+import { useWrappedWebsocket } from "../common/useWrappedWebsocket";
+import { ProductId } from "./orderbook.types";
+import {
+  UseOrderBookSubscribeProps,
+  UseOrderBookSubscribeResponse,
+} from "./useOrderbookSubscribe.types";
+import { transformOrderToLocalStructure } from "./utils";
 
 export const useOrderBookSubscribe = ({
   feed,
   socketUrl,
-}: UseOrderBookSubscribeProps) => {
+}: UseOrderBookSubscribeProps): UseOrderBookSubscribeResponse => {
   const [productIds, setproductIds] = useState([ProductId.XBTUSD]);
 
   const [currentProductIds, setcurrentProductIds] = useState([
     ProductId.XBTUSD,
   ]);
+
   // orderbook consumes specific reducer
-  const [orderBookState, dispatch]: [OrderBookState, Dispatch<any>] =
-    useReducer<Reducer<OrderBookState, OrderReducerAction>>(
-      ordersReducer,
-      initialOrders
-    );
+  const [orderBookState, dispatch]: [
+    OrderBookState,
+    Dispatch<OrderReducerAction>
+  ] = useReducer<Reducer<OrderBookState, OrderReducerAction>>(
+    ordersReducer,
+    initialOrders
+  );
 
   const orderStateThrottled = useThrottle(orderBookState, 1000);
   // create webscocket connection

@@ -1,4 +1,7 @@
-import { OrderPriceItem, OrderPriceType } from "../../../api/types";
+import {
+  OrderPriceItem,
+  OrderPriceType,
+} from "../../../api/orderbook/orderbook.types";
 
 export interface FindMatchedPriceItemProps {
   draftOrderPrices: OrderPriceItem[];
@@ -28,18 +31,20 @@ export type ProcessUpdatedOrderPriceListProps = {
   orderPriceType: OrderPriceType;
 };
 
-export const processUpdatedOrderPriceList = (
-  { orderPriceList, draft, orderPriceType }: any // TODO: type
-) => {
+export const processUpdatedOrderPriceList = ({
+  orderPriceList,
+  draft,
+  orderPriceType,
+}: any) => {
   if (!draft) return;
-  orderPriceList.map((newAsk: OrderPriceItem) => {
+  orderPriceList.map((newPriceItem: OrderPriceItem) => {
     const [foundAsk, foundAskIndex] = findMatchedPriceItem({
       draftOrderPrices: draft[orderPriceType],
-      newOrderPriceItem: newAsk,
+      newOrderPriceItem: newPriceItem,
     });
     const draftAsks = draft[orderPriceType] as OrderPriceItem[];
     // delete item / do nothing
-    if (newAsk?.size === 0) {
+    if (newPriceItem?.size === 0) {
       if (!foundAsk) {
         return;
       }
@@ -49,16 +54,16 @@ export const processUpdatedOrderPriceList = (
     // add new item
     if (!foundAsk) {
       draftAsks.push({
-        ...newAsk,
+        ...newPriceItem,
         total: 0,
       });
       return;
     }
     // update
     draftAsks[foundAskIndex] = {
-      type: newAsk.type,
-      price: newAsk.price,
-      size: newAsk.size + draftAsks[foundAskIndex]?.size,
+      type: newPriceItem.type,
+      price: newPriceItem.price,
+      size: newPriceItem.size + draftAsks[foundAskIndex]?.size,
       total: 0,
     };
   });

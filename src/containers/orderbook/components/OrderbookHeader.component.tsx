@@ -1,10 +1,18 @@
+/* eslint-disable react/prop-types */
 import React, { FunctionComponent, memo } from "react";
 import { Row } from "react-flexbox-grid";
+import { ProductId } from "../../../api/orderbook/orderbook.types";
 import { theme } from "../../../theme/theme.constants";
 import { StyledTitleCol } from "../Orderbook.styles";
 
-export const OrderbookHeader: FunctionComponent<any> = memo(
-  ({ spread, spreadPercentage, selectedPair }: any) => {
+export type OrderbookHeaderProps = {
+  spread: number;
+  spreadPercentage: number;
+  selectedPair: ProductId;
+};
+
+export const OrderbookHeader: FunctionComponent<OrderbookHeaderProps> = memo(
+  ({ spread, spreadPercentage, selectedPair }) => {
     return (
       <Row>
         <StyledTitleCol md={2} color={theme.colors.arcticBlue}>

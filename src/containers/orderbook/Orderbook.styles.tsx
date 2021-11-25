@@ -36,7 +36,12 @@ export const GridCol = styled("div")`
   flex: 1 1 0%;
 `;
 
-export const StyledChartIndicatorContainer = styled<any>("div")`
+export type StyledChartIndicatorContainerProps = {
+  align?: string;
+};
+export const StyledChartIndicatorContainer = styled(
+  "div"
+)<StyledChartIndicatorContainerProps>`
   position: absolute;
   width: 100%;
   height: 100%;
@@ -46,14 +51,15 @@ export const StyledChartIndicatorContainer = styled<any>("div")`
     justify-content: ${() => "flex-start"};
   }
 `;
-export const StyledChartIndicator = styled<any>("div").attrs(
-  ({ width }: any) => ({
+
+export const StyledChartIndicator = styled("div").attrs(
+  ({ width }: { width: string }) => ({
     style: {
       width: width ? width + "%" : "0%",
     },
   })
-)`
-  background: ${({ theme: { colors: defaultColors }, bgColor }: any) =>
+)<any>`
+  background: ${({ theme: { colors: defaultColors }, bgColor }) =>
     bgColor ? bgColor : defaultColors.hulkGreenStandard};
   height: 100%;
   border-radius: inherit;

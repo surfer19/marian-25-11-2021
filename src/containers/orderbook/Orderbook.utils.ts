@@ -1,4 +1,7 @@
-import { OrderPriceItem, OrderPriceType } from "../../api/types";
+import {
+  OrderPriceItem,
+  OrderPriceType,
+} from "../../api/orderbook/orderbook.types";
 import {
   CalculateCurrentSpreadProps,
   findHighestValueByAttribute,
@@ -77,7 +80,6 @@ export const prepareOrderItems = ({
   sortType,
 }: PrepareOrderItemsProps) => {
   const orderItem = orderPriceItemList.slice();
-  // ascending
   const ordersSorted: OrderPriceItem[] =
     sortType === SortType.Desc
       ? sortListDescendingByAttribute<OrderPriceItem, string>(
@@ -89,10 +91,10 @@ export const prepareOrderItems = ({
           "price"
         );
 
-  const levelsCountedAsks = countAllLevels(ordersSorted);
-  const totalOrderAsks = countTotalLevelRatios(levelsCountedAsks);
-  const ordersSlicedAsks = totalOrderAsks.slice(0, numberOfOrderItemsToShow);
-  return ordersSlicedAsks;
+  const levelsCounted = countAllLevels(ordersSorted);
+  const totalOrder = countTotalLevelRatios(levelsCounted);
+  const ordersSliced = totalOrder.slice(0, numberOfOrderItemsToShow);
+  return ordersSliced;
 };
 
 export const calculateCurrentSpread = ({

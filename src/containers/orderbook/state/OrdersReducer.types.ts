@@ -1,21 +1,21 @@
 /* eslint-disable no-unused-vars */
-import { Order, ProductId } from "../../../api/types";
+import { Order, ProductId } from "../../../api/orderbook/orderbook.types";
 
 export type ActionOrders = {
   type: string;
-  order: Order;
+  order?: Order;
 };
 
 export type ActionPair = {
   type: string;
-  pair: ProductId;
+  pair?: ProductId;
 };
 export type ActionClear = {
   type: string;
 };
 
 export type OrderBookState = {
-  currentPair: ProductId;
+  currentPair?: ProductId;
   order: Order;
 };
 

@@ -1,6 +1,10 @@
-import { Feed, OrderPriceType, ProductId } from "../../../api/types";
+import {
+  Feed,
+  OrderPriceType,
+  ProductId,
+} from "../../../api/orderbook/orderbook.types";
 import produce from "immer";
-import { processUpdatedOrderPriceList } from "./OrderReducer.utils";
+import { processUpdatedOrderPriceList } from "./OrderbookReducer.utils";
 import { OrderBookState, OrderReducerAction } from "./OrdersReducer.types";
 
 export const initialOrders = {
@@ -40,7 +44,9 @@ export const ordersReducer = (
       }
 
       case "updated-pair": {
-        draft.currentPair = action.pair;
+        if (draft) {
+          draft.currentPair = action.pair;
+        }
         break;
       }
       // needed while changing trading pair

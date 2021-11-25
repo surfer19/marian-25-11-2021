@@ -1,4 +1,4 @@
-import { OrderPriceItem } from "../api/types";
+import { OrderPriceItem } from "../api/orderbook/orderbook.types";
 
 type IndexedItem = {
   [key: string]: any;

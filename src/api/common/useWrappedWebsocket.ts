@@ -1,17 +1,12 @@
-// import { useState } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 import { WebSocketHook } from "react-use-websocket/dist/lib/types";
-export const statuses = {
-  [ReadyState.CONNECTING]: "Connecting",
-  [ReadyState.OPEN]: "Open",
-  [ReadyState.CLOSING]: "Closing",
-  [ReadyState.CLOSED]: "Closed",
-  [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-};
+import { statuses } from "../../containers/orderbook/Orderbook.constants";
 
 export const useWrappedWebsocket = (socketUrl: string) => {
-  const { sendMessage, lastMessage, readyState }: WebSocketHook<any> =
-    useWebSocket(socketUrl, { share: true });
+  const { sendMessage, lastMessage, readyState }: WebSocketHook = useWebSocket(
+    socketUrl,
+    { share: true }
+  );
 
   const connectionStatus = statuses[readyState];
 
