@@ -5,7 +5,7 @@ import {
 } from "../../../api/orderbook/orderbook.types";
 import produce from "immer";
 import { processUpdatedOrderPriceList } from "./OrderbookReducer.utils";
-import { OrderBookState, OrderReducerAction } from "./OrdersReducer.types";
+import { OrderBookState, OrderReducerAction } from "./OrderbookReducer.types";
 
 export const initialOrders = {
   currentPair: ProductId.XBTUSD,

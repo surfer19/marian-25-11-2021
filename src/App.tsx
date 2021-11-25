@@ -10,7 +10,7 @@ import { OrderbookContainer } from "./containers/orderbook/Orderbook.container";
 import {
   OrdersContext,
   OrdersDispatchContext,
-} from "./containers/orderbook/state/OrdersContext";
+} from "./containers/orderbook/state/OrderbookContext";
 import { useOrderBookSubscribe } from "./api/orderbook/useOrderbookSubscribe";
 import { useSnackbar } from "./hooks/useSnackBar";
 import { OrderbookSnackContent } from "./containers/orderbook/components/OrderbookSnackContent.component";

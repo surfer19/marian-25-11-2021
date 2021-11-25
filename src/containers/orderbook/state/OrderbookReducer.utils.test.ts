@@ -1,5 +1,10 @@
-import { Feed, OrderPriceType, ProductId } from "../../../api/orderbook/orderbook.types";
-import { ActionOrders, ordersReducer } from "./OrdersReducer";
+import {
+  Feed,
+  OrderPriceType,
+  ProductId,
+} from "../../../api/orderbook/orderbook.types";
+import { ordersReducer } from "./OrderbookReducer";
+import { ActionOrders } from "./OrderbookReducer.types";
 
 const initialAction = {
   type: "",

@@ -3,7 +3,7 @@ import { Dispatch } from "react";
 import {
   OrderBookState,
   OrderReducerAction,
-} from "../../containers/orderbook/state/OrdersReducer.types";
+} from "../../containers/orderbook/state/OrderbookReducer.types";
 import { Feed, ProductId } from "./orderbook.types";
 
 export type UseOrderBookSubscribeProps = {

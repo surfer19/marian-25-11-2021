@@ -2,8 +2,8 @@
 import React, { useContext, FunctionComponent } from "react";
 import { ProductId } from "../../api/orderbook/orderbook.types";
 import { Orderbook } from "./Orderbook.component";
-import { OrdersContext } from "./state/OrdersContext";
-import { OrderBookState } from "./state/OrdersReducer.types";
+import { OrdersContext } from "./state/OrderbookContext";
+import { OrderBookState } from "./state/OrderbookReducer.types";
 
 export type OrderbookContainerProps = {
   setproductIds: (productIds: ProductId[]) => void;

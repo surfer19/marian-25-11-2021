@@ -5,10 +5,10 @@ import { OrderbookAsks } from "./components/OrderbookAsks.component";
 import { OrderbookBids } from "./components/OrderbookBids.component";
 import { OrderbookHeader } from "./components/OrderbookHeader.component";
 import { useToggle, useMedia } from "react-use";
-import { OrdersDispatchContext } from "./state/OrdersContext";
+import { OrdersDispatchContext } from "./state/OrderbookContext";
 import { calculateCurrentSpread, prepareOrderItems } from "./Orderbook.utils";
 import { OrderbookProps } from "./Orderbook.types";
-import { SortType } from "./state/OrdersReducer.types";
+import { SortType } from "./state/OrderbookReducer.types";
 import { OrderBookWrapper } from "./Orderbook.styles";
 import { Button } from "../../components/Button/Button.component";
 

@@ -5,11 +5,11 @@ import { ReadyState } from "react-use-websocket";
 import {
   ordersReducer,
   initialOrders,
-} from "../../containers/orderbook/state/OrdersReducer";
+} from "../../containers/orderbook/state/OrderbookReducer";
 import {
   OrderBookState,
   OrderReducerAction,
-} from "../../containers/orderbook/state/OrdersReducer.types";
+} from "../../containers/orderbook/state/OrderbookReducer.types";
 import { useWrappedWebsocket } from "../common/useWrappedWebsocket";
 import { ProductId } from "./orderbook.types";
 import {

@@ -8,7 +8,7 @@ import {
   sortListAscendingByAttribute,
   sortListDescendingByAttribute,
 } from "../../utils/utils";
-import { SortType } from "./state/OrdersReducer.types";
+import { SortType } from "./state/OrderbookReducer.types";
 
 export type PrepareOrderItemsProps = {
   orderPriceItemList: OrderPriceItem[];

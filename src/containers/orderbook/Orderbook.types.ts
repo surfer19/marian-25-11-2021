@@ -1,5 +1,5 @@
 import { ProductId } from "../../api/orderbook/orderbook.types";
-import { OrderBookState } from "./state/OrdersReducer.types";
+import { OrderBookState } from "./state/OrderbookReducer.types";
 
 export interface OrderbookProps {
   orderState: OrderBookState;
