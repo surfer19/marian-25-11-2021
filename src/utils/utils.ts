@@ -1,4 +1,4 @@
-import { OrderPriceItem, OrderPriceType } from "../api/types";
+import { OrderPriceItem } from "../api/types";
 
 type IndexedItem = {
   [key: string]: any;
@@ -38,61 +38,8 @@ export const findHighestValueByAttribute = <
   );
   return reducedItem[attribute];
 };
-// TODO: unit tests for bid
-export const countTotalByLevels = (
-  levels: OrderPriceItem[],
-  edgeLevel: OrderPriceItem
-) => {
-  const reducer = (
-    previousLevel: OrderPriceItem,
-    currentLevel: OrderPriceItem
-  ) => {
-    const isInRangeByOrderType =
-      currentLevel.type === OrderPriceType.Asks
-        ? currentLevel.price > edgeLevel.price
-        : currentLevel.price < edgeLevel.price;
 
-    if (isInRangeByOrderType) {
-      return {
-        ...previousLevel,
-      };
-    } else {
-      return {
-        ...currentLevel,
-        total: previousLevel?.total
-          ? previousLevel.total + currentLevel.size
-          : currentLevel.size,
-      };
-    }
-  };
-  return levels.reduce(reducer, {
-    price: 0,
-    size: 0,
-    total: 0,
-    type: OrderPriceType.Asks,
-  });
-};
-
-export const countTotalLevelRatios = (
-  orderPriceList: OrderPriceItem[]
-): OrderPriceItem[] => {
-  const highestTotalValue = findHighestValueByAttribute(
-    orderPriceList,
-    "total"
-  );
-  return orderPriceList.map((priceItem: OrderPriceItem) => ({
-    ...priceItem,
-    totalLevelRatio: parseFloat(
-      ((priceItem.total / highestTotalValue) * 100).toFixed(2)
-    ),
-  }));
-};
-
-export const countAllLevels = (
-  orderPriceList: OrderPriceItem[]
-): OrderPriceItem[] => {
-  return orderPriceList.map((orderPriceItem) => {
-    const level = countTotalByLevels(orderPriceList, orderPriceItem);
-    return level;
-  });
+export type CalculateCurrentSpreadProps = {
+  ask: OrderPriceItem;
+  bid: OrderPriceItem;
 };

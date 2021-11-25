@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { Dispatch, Reducer, useEffect, useReducer, useState } from "react";
 import { useThrottle } from "react-use";
 import { Feed, ProductId } from "../api/types";
 import { transformOrderToLocalStructure } from "../api/utils";
@@ -6,44 +6,71 @@ import {
   ordersReducer,
   initialOrders,
 } from "../containers/orderbook/state/OrdersReducer";
-import { useSubscribe } from "./useSubscribe";
-
-export const socketUrl = "wss://www.cryptofacilities.com/ws/v1"; // TODO: move to env variables
+import {
+  OrderBookState,
+  OrderReducerAction,
+} from "../containers/orderbook/state/OrdersReducer.types";
+import { useWrappedWebsocket } from "./useWrappedWebsocket";
 
 export interface UseOrderBookSubscribeProps {
-  initialProductIds: Array<ProductId>;
   feed: Feed;
+  socketUrl: string;
 }
 
 export const useOrderBookSubscribe = ({
-  initialProductIds,
   feed,
+  socketUrl,
 }: UseOrderBookSubscribeProps) => {
-  const [productIds, setproductIds] = useState(initialProductIds);
+  const [productIds, setproductIds] = useState([ProductId.XBTUSD]);
 
+  const [currentProductIds, setcurrentProductIds] = useState([
+    ProductId.XBTUSD,
+  ]);
   // orderbook consumes specific reducer
-  const [orderBookState, dispatch]: any = useReducer<any>(
-    ordersReducer,
-    initialOrders
-  );
+  const [orderBookState, dispatch]: [OrderBookState, Dispatch<any>] =
+    useReducer<Reducer<OrderBookState, OrderReducerAction>>(
+      ordersReducer,
+      initialOrders
+    );
 
   const orderStateThrottled = useThrottle(orderBookState, 1000);
+  // create webscocket connection
+  const { subscribe, unsubscribe, lastMessage, connectionStatus } =
+    useWrappedWebsocket(socketUrl);
 
-  // eslint-disable-next-line no-unused-vars
-  const { subscribe, unsubscribe, lastMessage } = useSubscribe();
   const recievedData = lastMessage && JSON.parse(lastMessage.data);
   // handle errors comming from API
-  if (recievedData?.event === "alert") {
+  if (
+    recievedData?.event === "alert" &&
+    recievedData.message !== "Not subscribed to feed"
+  ) {
     console.warn("Something went wrong with message call: ", lastMessage);
   }
 
-  useEffect(() => {
-    const inputMessageData = {
+  const unsubscribeOrderbook = <T>(value?: T) => {
+    unsubscribe({
+      feed,
+      product_ids: value ? value : currentProductIds,
+    });
+  };
+
+  const subscribeOrderbook = () => {
+    subscribe({
       feed,
       product_ids: productIds,
-    };
-    subscribe(inputMessageData);
-  }, []);
+    });
+  };
+
+  useEffect(() => {
+    setcurrentProductIds(productIds);
+    unsubscribeOrderbook();
+    setTimeout(() => {
+      dispatch({
+        type: "clear",
+      });
+      subscribeOrderbook();
+    }, 1000);
+  }, [productIds]);
 
   useEffect(() => {
     if (lastMessage !== null) {
@@ -57,11 +84,12 @@ export const useOrderBookSubscribe = ({
     }
   }, [lastMessage, dispatch]);
 
-  return { orderBookState: orderStateThrottled, dispatch, setproductIds };
+  return {
+    orderBookState: orderStateThrottled,
+    dispatch,
+    setproductIds,
+    connectionStatus,
+    unsubscribeOrderbook,
+    subscribeOrderbook,
+  };
 };
-
-//   sendMessage(
-//     '{"event":"unsubscribe","feed":"book_ui_1","product_ids":["PI_XBTUSD"]}'
-//   );
-//data.event !== "unsubscribed" &&
-// if (data.feed === "book_ui_1_snapshot") {xrx

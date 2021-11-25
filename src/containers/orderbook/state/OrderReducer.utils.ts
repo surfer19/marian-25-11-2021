@@ -31,6 +31,7 @@ export type ProcessUpdatedOrderPriceListProps = {
 export const processUpdatedOrderPriceList = (
   { orderPriceList, draft, orderPriceType }: any // TODO: type
 ) => {
+  if (!draft) return;
   orderPriceList.map((newAsk: OrderPriceItem) => {
     const [foundAsk, foundAskIndex] = findMatchedPriceItem({
       draftOrderPrices: draft[orderPriceType],

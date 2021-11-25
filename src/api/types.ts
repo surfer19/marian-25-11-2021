@@ -16,6 +16,7 @@ export enum OrderPriceType {
 
 export enum ProductId {
   XBTUSD = "PI_XBTUSD",
+  ETHUSD = "PI_ETHUSD",
   Empty = "",
 }
 

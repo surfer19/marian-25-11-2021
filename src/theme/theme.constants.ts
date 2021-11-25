@@ -1,4 +1,15 @@
-export const theme = {
+export type Obj = {
+  [key: string]: string | number;
+};
+
+export type Theme = {
+  colors: Obj;
+  fonts: string[];
+  fontSizes: Obj;
+  fontWeights: Obj;
+};
+
+export const theme: Theme = {
   colors: {
     hulkGreenLight: "#007961",
     hulkGreenStandard: "#002d34",
@@ -7,6 +18,7 @@ export const theme = {
     arcticBlue: "#828fa1",
     darkBlue: "#0d1423",
     standardBlue: "#31415c",
+    violent: "#5c3ae1",
   },
   fonts: ["sans-serif", "Roboto"],
   fontSizes: {

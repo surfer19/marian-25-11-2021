@@ -1,7 +1,6 @@
 // import { useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { WebSocketHook } from "react-use-websocket/dist/lib/types";
-import { socketUrl } from "./useOrderbookSubscribe"; //TODO:
 export const statuses = {
   [ReadyState.CONNECTING]: "Connecting",
   [ReadyState.OPEN]: "Open",
@@ -10,9 +9,9 @@ export const statuses = {
   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
 };
 
-export const useSubscribe = () => {
+export const useWrappedWebsocket = (socketUrl: string) => {
   const { sendMessage, lastMessage, readyState }: WebSocketHook<any> =
-    useWebSocket(socketUrl);
+    useWebSocket(socketUrl, { share: true });
 
   const connectionStatus = statuses[readyState];
 

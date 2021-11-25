@@ -1,5 +1,5 @@
-import { Feed, ProductId } from "../../../api/types";
-import { ordersReducer } from "./OrdersReducer";
+import { Feed, OrderPriceType, ProductId } from "../../../api/types";
+import { ActionOrders, ordersReducer } from "./OrdersReducer";
 
 const initialAction = {
   type: "",
@@ -16,7 +16,7 @@ describe("Orders Reducer", () => {
     it("should match initial state", () => {
       const state = undefined;
       const action = initialAction;
-      expect(ordersReducer(state, action)).toEqual(
+      expect(ordersReducer(state, action).order).toEqual(
         expect.objectContaining({
           feed: Feed.Empty,
           product_id: ProductId.Empty,
@@ -27,108 +27,125 @@ describe("Orders Reducer", () => {
     });
     it("should add a asks from new order", () => {
       const state = {
-        ...initialAction.order,
-        feed: Feed.Ui1,
+        currentPair: ProductId.Empty,
+        order: {
+          ...initialAction.order,
+          feed: Feed.Ui1,
+        },
       };
-      const action = {
+      const action: ActionOrders = {
         type: "updated",
         order: {
           feed: Feed.Ui1,
           bids: [],
           asks: [
-            { price: 12000, size: 1000 },
-            { price: 12001, size: 1000 },
+            { price: 12000, size: 1000, total: 0, type: OrderPriceType.Asks },
+            { price: 12001, size: 1000, total: 0, type: OrderPriceType.Asks },
           ],
         },
       };
-      const result = ordersReducer(state, action);
-      expect(result.bids).toHaveLength(0);
-      expect(result.asks).toHaveLength(2);
-      expect(result.asks[0].price).toEqual(12000);
-      expect(result.asks[1].price).toEqual(12001);
+      const { order } = ordersReducer(state, action);
+      expect(order.bids).toHaveLength(0);
+      expect(order.asks).toHaveLength(2);
+      expect(order.asks[0].price).toEqual(12000);
+      expect(order.asks[1].price).toEqual(12001);
     });
 
     it("should add a bids from new order", () => {
       const state = {
-        ...initialAction.order,
-        feed: Feed.Ui1,
+        currentPair: ProductId.Empty,
+        order: {
+          ...initialAction.order,
+          feed: Feed.Ui1,
+        },
       };
       const action = {
         type: "updated",
         order: {
           feed: Feed.Ui1,
           bids: [
-            { price: 12000, size: 1000 },
-            { price: 12001, size: 1000 },
+            { price: 12000, size: 1000, total: 0, type: OrderPriceType.Bids },
+            { price: 12001, size: 1000, total: 0, type: OrderPriceType.Bids },
           ],
           asks: [],
         },
       };
-      const result = ordersReducer(state, action);
-      expect(result.asks).toHaveLength(0);
-      expect(result.bids).toHaveLength(2);
-      expect(result.bids[0].price).toEqual(12000);
-      expect(result.bids[1].price).toEqual(12001);
+      const { order } = ordersReducer(state, action);
+      expect(order.asks).toHaveLength(0);
+      expect(order.bids).toHaveLength(2);
+      expect(order.bids[0].price).toEqual(12000);
+      expect(order.bids[1].price).toEqual(12001);
     });
 
     it("should join two same price asks", () => {
       const state = {
-        ...initialAction.order,
-        asks: [
-          { price: 12001, size: 1000 },
-          { price: 12000, size: 1000 },
-        ],
-        feed: Feed.Ui1,
+        currentPair: ProductId.Empty,
+        order: {
+          ...initialAction.order,
+          asks: [
+            { price: 12001, size: 1000, total: 0, type: OrderPriceType.Asks },
+            { price: 12000, size: 1000, total: 0, type: OrderPriceType.Asks },
+          ],
+          feed: Feed.Ui1,
+        },
       };
       const action = {
         type: "updated",
         order: {
           feed: Feed.Ui1,
-          asks: [{ price: 12000, size: 1000 }],
+          asks: [
+            { price: 12000, size: 1000, total: 0, type: OrderPriceType.Asks },
+          ],
           bids: [],
         },
       };
       const result = ordersReducer(state, action);
-      expect(result.asks).toHaveLength(2);
-      expect(result.asks[0].price).toEqual(12001);
-      expect(result.asks[0].size).toEqual(1000);
-      expect(result.asks[1].price).toEqual(12000);
-      expect(result.asks[1].size).toEqual(2000);
+      expect(result?.order.asks).toHaveLength(2);
+      expect(result?.order.asks[0].price).toEqual(12001);
+      expect(result?.order.asks[0].size).toEqual(1000);
+      expect(result?.order.asks[1].price).toEqual(12000);
+      expect(result?.order.asks[1].size).toEqual(2000);
     });
 
     it("should join two same price bids", () => {
       const state = {
-        ...initialAction.order,
-        bids: [
-          { price: 12001, size: 1000 },
-          { price: 12000, size: 1000 },
-        ],
-        feed: Feed.Ui1,
+        order: {
+          ...initialAction.order,
+          bids: [
+            { price: 12001, size: 1000, total: 0, type: OrderPriceType.Bids },
+            { price: 12000, size: 1000, total: 0, type: OrderPriceType.Bids },
+          ],
+          feed: Feed.Ui1,
+        },
       };
       const action = {
         type: "updated",
         order: {
           feed: Feed.Ui1,
           asks: [],
-          bids: [{ price: 12000, size: 1000 }],
+          bids: [
+            { price: 12000, size: 1000, total: 0, type: OrderPriceType.Asks },
+          ],
         },
       };
-      const result = ordersReducer(state, action);
-      expect(result.bids).toHaveLength(2);
-      expect(result.bids[0].price).toEqual(12001);
-      expect(result.bids[0].size).toEqual(1000);
-      expect(result.bids[1].price).toEqual(12000);
-      expect(result.bids[1].size).toEqual(2000);
+      const { order } = ordersReducer(state, action);
+      expect(order.bids).toHaveLength(2);
+      expect(order.bids[0].price).toEqual(12001);
+      expect(order.bids[0].size).toEqual(1000);
+      expect(order.bids[1].price).toEqual(12000);
+      expect(order.bids[1].size).toEqual(2000);
     });
 
     it("should remove", () => {
       const state = {
-        ...initialAction.order,
-        asks: [
-          { price: 12001, size: 2000 },
-          { price: 12000, size: 1000 },
-        ],
-        feed: Feed.Ui1,
+        order: {
+          ...initialAction.order,
+          asks: [
+            { price: 12001, size: 2000 },
+            { price: 12000, size: 1000 },
+          ],
+          feed: Feed.Ui1,
+        },
       };
       const action = {
         type: "updated",
@@ -141,15 +158,17 @@ describe("Orders Reducer", () => {
           ],
         },
       };
-      const result = ordersReducer(state, action);
-      expect(result.asks).toHaveLength(1);
+      const { order } = ordersReducer(state, action);
+      expect(order.asks).toHaveLength(1);
     });
 
     it("should not add item zero sized item", () => {
       const state = {
-        ...initialAction.order,
-        asks: [],
-        feed: Feed.Ui1,
+        order: {
+          ...initialAction.order,
+          asks: [],
+          feed: Feed.Ui1,
+        },
       };
       const action = {
         type: "updated",
@@ -164,8 +183,8 @@ describe("Orders Reducer", () => {
           ],
         },
       };
-      const result = ordersReducer(state, action);
-      expect(result.asks).toHaveLength(3);
+      const { order } = ordersReducer(state, action);
+      expect(order.asks).toHaveLength(3);
     });
   });
 });

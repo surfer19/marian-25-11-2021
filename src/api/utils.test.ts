@@ -1,7 +1,4 @@
-import {
-  filterOutZeroSizeOrders,
-  transformPriceListToLocalStructure,
-} from "./utils";
+import { transformPriceListToLocalStructure } from "./utils";
 
 export const mockedPriceListAPI = [
   [63278.5, 0.0],
@@ -23,15 +20,6 @@ export const nonNullMockedPriceList = [
 ];
 
 describe("API Utils method", () => {
-  describe("filterOutZeroSizeOrder", () => {
-    it("should filter out zero prices", () => {
-      expect(filterOutZeroSizeOrders(mockedPriceList)).toHaveLength(2);
-      expect(filterOutZeroSizeOrders(mockedPriceList)).toEqual(
-        nonNullMockedPriceList
-      );
-    });
-  });
-
   describe("transformOrdersInternally ", () => {
     it("should transorm initial prices correctly", () => {
       expect(
